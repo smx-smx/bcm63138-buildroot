@@ -1,0 +1,12 @@
+diff -ruNb asterisk-14.7.6/main/Makefile asterisk-14.7.6-patched/main/Makefile
+--- asterisk-14.7.6/main/Makefile	2018-02-21 19:53:52.000000000 +0100
++++ asterisk-14.7.6-patched/main/Makefile	2018-07-04 04:44:50.406845551 +0200
+@@ -47,7 +47,7 @@
+ AST_LIBS+=$(RT_LIB)
+ AST_LIBS+=$(SYSTEMD_LIB)
+ 
+-ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc linux-musl kfreebsd-gnu),)
++ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc linux-uclibcgnueabi linux-musl kfreebsd-gnu),)
+   AST_LIBS+=-ldl
+   ifneq (x$(CAP_LIB),x)
+     AST_LIBS+=$(CAP_LIB)
