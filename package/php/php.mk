@@ -8,8 +8,8 @@ PHP_VERSION = 7.2.5
 PHP_SITE = http://www.php.net/distributions
 PHP_SOURCE = php-$(PHP_VERSION).tar.xz
 PHP_INSTALL_STAGING = YES
-PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
-PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install install-cli
+PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install install-cli
 PHP_DEPENDENCIES = host-pkgconf
 PHP_LICENSE = PHP-3.01
 PHP_LICENSE_FILES = LICENSE
@@ -20,7 +20,8 @@ PHP_CONF_OPTS = \
 	--without-pear \
 	--with-config-file-path=/etc \
 	--disable-phpdbg \
-	--disable-rpath
+	--disable-rpath \
+	--disable-werror
 PHP_CONF_ENV = \
 	ac_cv_func_strcasestr=yes \
 	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
