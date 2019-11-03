@@ -1,0 +1,14 @@
+diff -rub asterisk-14.7.6-patched/configure.ac asterisk-14.7.6/configure.ac
+--- asterisk-14.7.6-patched/configure.ac	2018-02-21 19:53:52.000000000 +0100
++++ asterisk-14.7.6/configure.ac	2018-06-20 05:07:13.632496222 +0200
+@@ -1360,10 +1360,6 @@
+ [BIND8_CFLAGS=-DBIND_8_COMPAT])
+ AC_SUBST(BIND8_CFLAGS)
+ 
+-AST_C_DEFINE_CHECK([GLOB_NOMAGIC], [GLOB_NOMAGIC], [glob.h])
+-
+-AST_C_DEFINE_CHECK([GLOB_BRACE], [GLOB_BRACE], [glob.h])
+-
+ AST_C_DEFINE_CHECK([RTLD_NOLOAD], [RTLD_NOLOAD], [dlfcn.h])
+ 
+ AST_C_DEFINE_CHECK([IP_MTU_DISCOVER], [IP_MTU_DISCOVER], [netinet/in.h])
