@@ -1668,13 +1668,6 @@ config BR2_PACKAGE_KODI_ADSP_FREESURROUND
 ###############################################################################
 comment "Legacy options removed in 2018.02"
 
-config BR2_KERNEL_HEADERS_3_4
-	bool "kernel headers version 3.4.x are no longer supported"
-	select BR2_LEGACY
-	help
-	  Version 3.4.x of the Linux kernel headers are no longer
-	  maintained upstream and are now removed.
-
 config BR2_KERNEL_HEADERS_3_10
 	bool "kernel headers version 3.10.x are no longer supported"
 	select BR2_LEGACY
