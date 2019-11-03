@@ -64,6 +64,8 @@ else
 LIGHTTPD_CONF_OPTS += --without-lua
 endif
 
+LIGHTTPD_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+
 define LIGHTTPD_INSTALL_CONFIG
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
