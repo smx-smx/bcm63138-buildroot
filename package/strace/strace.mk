@@ -34,6 +34,8 @@ else
 STRACE_CONF_OPTS += --without-libiberty
 endif
 
+STRACE_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+
 define STRACE_REMOVE_STRACE_GRAPH
 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
 endef
