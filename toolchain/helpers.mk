@@ -162,8 +162,8 @@ copy_toolchain_sysroot = \
 # $2: sysroot directory
 # $3: kernel version string, in the form: X.Y
 #
-check_kernel_headers_version = \
-	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
+#check_kernel_headers_version = \
+#	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
 
 #
 # Check the specific gcc version actually matches the version in the
