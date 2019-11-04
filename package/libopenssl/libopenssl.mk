@@ -113,6 +113,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
 			$(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread threads, no-threads) \
 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
 			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
+			$(if $(BR2_PACKAGE_UCLIBC),no-async) \
 			no-rc5 \
 			enable-camellia \
 			enable-mdc2 \
