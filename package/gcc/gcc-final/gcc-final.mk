@@ -108,6 +108,11 @@ else
 HOST_GCC_FINAL_CONF_OPTS += --disable-libgomp
 endif
 
+# Disable libssp if we're targeting uclibc
+ifeq ($(BR2_PACKAGE_UCLIBC),y)
+HOST_GCC_FINAL_CONF_OPTS += --disable-libssp
+endif
+
 # End with user-provided options, so that they can override previously
 # defined options.
 HOST_GCC_FINAL_CONF_OPTS += \
