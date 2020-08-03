@@ -15,8 +15,8 @@ Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 [ThomasDS: also update fdt.h which has the same issue, seen on U-Boot
 2011.03]
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-[Titouan: Taking new SPDX line into account]
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+[SB: Updated to match context change in v1.5.1]
+Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
 ---
  libfdt/fdt.h        | 4 ++++
  libfdt/libfdt.h     | 4 ++++
@@ -24,7 +24,7 @@ Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
  3 files changed, 12 insertions(+)
 
 diff --git a/libfdt/fdt.h b/libfdt/fdt.h
-index 74961f9..2904f48 100644
+index f2e6880..0f1dc4d 100644
 --- a/libfdt/fdt.h
 +++ b/libfdt/fdt.h
 @@ -1,4 +1,8 @@
@@ -37,7 +37,7 @@ index 74961f9..2904f48 100644
  #define FDT_H
  /*
 diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
-index 830b77e..bef4566 100644
+index 8037f39..7668432 100644
 --- a/libfdt/libfdt.h
 +++ b/libfdt/libfdt.h
 @@ -1,4 +1,8 @@
@@ -50,7 +50,7 @@ index 830b77e..bef4566 100644
  #define LIBFDT_H
  /*
 diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
-index eb20538..6a61e6a 100644
+index 73b6d40..b95a287 100644
 --- a/libfdt/libfdt_env.h
 +++ b/libfdt/libfdt_env.h
 @@ -1,4 +1,8 @@
@@ -63,5 +63,5 @@ index eb20538..6a61e6a 100644
  #define LIBFDT_ENV_H
  /*
 -- 
-2.21.0
+2.22.0.216.g00a2a96fc9
 

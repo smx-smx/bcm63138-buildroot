@@ -49,6 +49,10 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
 IPUTILS_NINFOD = n
 endif
 
+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+IPUTILS_DEPENDENCIES += systemd
+endif
+
 # ninfod requires <pthread.h>
 ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 IPUTILS_NINFOD = n
@@ -58,11 +62,6 @@ ifeq ($(IPUTILS_NINFOD),n)
 IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
 else
 IPUTILS_CONF_OPTS += -DBUILD_NINFOD=true
-define IPUTILS_INSTALL_SERVICE_NINFOD
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-	ln -sf ../../../../lib/systemd/system/ninfod.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ninfod.service
-endef
 endif
 
 ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
@@ -89,7 +88,7 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
 
 # upstream requires distros to create symlink
 define IPUTILS_CREATE_PING6_SYMLINK
-	ln -sf $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
+	ln -sf ping $(TARGET_DIR)/bin/ping6
 endef
 IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
 
@@ -113,16 +112,5 @@ define IPUTILS_PERMISSIONS
 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
 endef
 endif
-
-define IPUTILS_INSTALL_SERVICE_RDISC
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-	ln -sf ../../../../lib/systemd/system/rdisc.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rdisc.service
-endef
-
-define IPUTILS_INSTALL_INIT_SYSTEMD
-	$(IPUTILS_INSTALL_SERVICE_NINFOD)
-	$(IPUTILS_INSTALL_SERVICE_RDISC)
-endef
 
 $(eval $(meson-package))
