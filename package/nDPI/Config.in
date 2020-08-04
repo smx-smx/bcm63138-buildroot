@@ -1,0 +1,7 @@
+config BR2_PACKAGE_NDPI
+	bool "ndpi"
+	depends on BR2_USE_MMU # fork()
+	depends on BR2_PACKAGE_LIBPCAP
+	help
+
+	   https://github.com/ntop/nDPI
