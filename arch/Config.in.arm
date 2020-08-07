@@ -209,12 +209,6 @@ config BR2_cortex_a9
 	select BR2_ARM_CPU_HAS_THUMB2
 	select BR2_ARM_CPU_ARMV7A
 	select BR2_ARCH_HAS_MMU_OPTIONAL
-config BR2_cortex_a9_brcm
-	bool "cortex-A9 (brcm)"
-	select BR2_ARM_CPU_HAS_ARM
-	select BR2_ARM_CPU_HAS_THUMB2
-	select BR2_ARM_CPU_ARMV7A
-	select BR2_ARCH_HAS_MMU_OPTIONAL
 config BR2_cortex_a12
 	bool "cortex-A12"
 	select BR2_ARM_CPU_HAS_ARM
