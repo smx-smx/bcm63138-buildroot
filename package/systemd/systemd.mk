@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SYSTEMD_VERSION = 245.7
+SYSTEMD_VERSION = 246.5
 SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
 SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
 SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
@@ -15,34 +15,39 @@ SYSTEMD_DEPENDENCIES = \
 	host-gperf \
 	kmod \
 	libcap \
-	util-linux \
+	util-linux-libs \
 	$(TARGET_NLS_DEPENDENCIES)
+
+SYSTEMD_SELINUX_MODULES = systemd udev
 
 SYSTEMD_PROVIDES = udev
 
 SYSTEMD_CONF_OPTS += \
-	-Drootlibdir='/usr/lib' \
-	-Dsysvinit-path= \
-	-Dsysvrcnd-path= \
-	-Dutmp=false \
-	-Dblkid=true \
-	-Dman=false \
-	-Dima=false \
-	-Dldconfig=false \
 	-Ddefault-hierarchy=hybrid \
-	-Dtests=false \
+	-Didn=true \
+	-Dima=false \
+	-Dkexec-path=/usr/sbin/kexec \
+	-Dkmod-path=/usr/bin/kmod \
+	-Dldconfig=false \
+	-Dloadkeys-path=/usr/bin/loadkeys \
+	-Dman=false \
+	-Dmount-path=/usr/bin/mount \
+	-Dnss-systemd=true \
+	-Dquotacheck-path=/usr/sbin/quotacheck \
+	-Dquotaon-path=/usr/sbin/quotaon \
+	-Drootlibdir='/usr/lib' \
+	-Dsetfont-path=/usr/bin/setfont \
 	-Dsplit-bin=true \
 	-Dsplit-usr=false \
-	-Dsystem-uid-max=999 \
-	-Dsystem-gid-max=999 \
-	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
-	-Dkmod-path=/usr/bin/kmod \
-	-Dkexec-path=/usr/sbin/kexec \
 	-Dsulogin-path=/usr/sbin/sulogin \
-	-Dmount-path=/usr/bin/mount \
+	-Dsystem-gid-max=999 \
+	-Dsystem-uid-max=999 \
+	-Dsysvinit-path= \
+	-Dsysvrcnd-path= \
+	-Dtelinit-path= \
+	-Dtests=false \
 	-Dumount-path=/usr/bin/umount \
-	-Didn=true \
-	-Dnss-systemd=true
+	-Dutmp=false
 
 ifeq ($(BR2_PACKAGE_ACL),y)
 SYSTEMD_DEPENDENCIES += acl
@@ -125,6 +130,13 @@ else
 SYSTEMD_CONF_OPTS += -Dbzip2=false
 endif
 
+ifeq ($(BR2_PACKAGE_ZSTD),y)
+SYSTEMD_DEPENDENCIES += zstd
+SYSTEMD_CONF_OPTS += -Dzstd=true
+else
+SYSTEMD_CONF_OPTS += -Dzstd=false
+endif
+
 ifeq ($(BR2_PACKAGE_LZ4),y)
 SYSTEMD_DEPENDENCIES += lz4
 SYSTEMD_CONF_OPTS += -Dlz4=true
@@ -201,24 +213,50 @@ else
 SYSTEMD_CONF_OPTS += -Dpcre2=false
 endif
 
-ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
-SYSTEMD_DEPENDENCIES += libmicrohttpd
-SYSTEMD_CONF_OPTS += -Dmicrohttpd=true
-ifeq ($(BR2_PACKAGE_LIBQRENCODE),y)
-SYSTEMD_CONF_OPTS += -Dqrencode=true
-SYSTEMD_DEPENDENCIES += libqrencode
+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+SYSTEMD_CONF_OPTS += -Dblkid=true
 else
-SYSTEMD_CONF_OPTS += -Dqrencode=false
+SYSTEMD_CONF_OPTS += -Dblkid=false
 endif
+
+ifeq ($(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),y)
+SYSTEMD_CONF_OPTS += -Dnologin-path=/sbin/nologin
 else
-SYSTEMD_CONF_OPTS += -Dmicrohttpd=false -Dqrencode=false
+SYSTEMD_CONF_OPTS += -Dnologin-path=/bin/false
+endif
+
+ifeq ($(BR2_PACKAGE_SYSTEMD_INITRD),y)
+SYSTEMD_CONF_OPTS += -Dinitrd=true
+else
+SYSTEMD_CONF_OPTS += -Dinitrd=false
+endif
+
+ifeq ($(BR2_PACKAGE_SYSTEMD_KERNELINSTALL),y)
+SYSTEMD_CONF_OPTS += -Dkernel-install=true
+else
+SYSTEMD_CONF_OPTS += -Dkernel-install=false
+endif
+
+ifeq ($(BR2_PACKAGE_SYSTEMD_ANALYZE),y)
+SYSTEMD_CONF_OPTS += -Danalyze=true
+else
+SYSTEMD_CONF_OPTS += -Danalyze=false
 endif
 
 ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
-SYSTEMD_CONF_OPTS += -Dremote=true
+# remote also depends on libcurl, this is already added above.
+SYSTEMD_DEPENDENCIES += libmicrohttpd
+SYSTEMD_CONF_OPTS += -Dremote=true -Dmicrohttpd=true
 SYSTEMD_REMOTE_USER = systemd-journal-remote -1 systemd-journal-remote -1 * - - - systemd Journal Remote
 else
-SYSTEMD_CONF_OPTS += -Dremote=false
+SYSTEMD_CONF_OPTS += -Dremote=false -Dmicrohttpd=false
+endif
+
+ifeq ($(BR2_PACKAGE_LIBQRENCODE),y)
+SYSTEMD_DEPENDENCIES += libqrencode
+SYSTEMD_CONF_OPTS += -Dqrencode=true
+else
+SYSTEMD_CONF_OPTS += -Dqrencode=false
 endif
 
 ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
@@ -378,6 +416,12 @@ else
 SYSTEMD_CONF_OPTS += -Dpolkit=false
 endif
 
+ifeq ($(BR2_PACKAGE_SYSTEMD_PORTABLED),y)
+SYSTEMD_CONF_OPTS += -Dportabled=true
+else
+SYSTEMD_CONF_OPTS += -Dportabled=false
+endif
+
 ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
 SYSTEMD_CONF_OPTS += -Dnetworkd=true
 SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
@@ -486,9 +530,6 @@ endef
 
 define SYSTEMD_USERS
 	# udev user groups
-	- - input -1 * - - - Input device group
-	- - render -1 * - - - DRI rendering nodes
-	- - kvm -1 * - - - kvm nodes
 	# systemd user groups
 	- - systemd-journal -1 * - - - Journal
 	$(SYSTEMD_REMOTE_USER)
@@ -658,7 +699,14 @@ HOST_SYSTEMD_CONF_OPTS = \
 	-Dtests=false \
 	-Dglib=false \
 	-Dacl=false \
-	-Dsysvinit-path=''
+	-Dsysvinit-path='' \
+	-Dinitrd=false \
+	-Dxdg-autostart=false \
+	-Dkernel-install=false \
+	-Dsystemd-analyze=false \
+	-Dlibcryptsetup=false \
+	-Daudit=false \
+	-Dzstd=false
 
 HOST_SYSTEMD_DEPENDENCIES = \
 	$(BR2_COREUTILS_HOST_DEPENDENCY) \

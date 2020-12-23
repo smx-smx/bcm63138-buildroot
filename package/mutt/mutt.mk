@@ -4,12 +4,15 @@
 #
 ################################################################################
 
-MUTT_VERSION = 1.14.4
+MUTT_VERSION = 1.14.7
 MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
 MUTT_LICENSE = GPL-2.0+
 MUTT_LICENSE_FILES = GPL
 MUTT_DEPENDENCIES = ncurses
 MUTT_CONF_OPTS = --disable-doc --disable-smtp
+
+# 0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+MUTT_IGNORE_CVES += CVE-2020-28896
 
 ifeq ($(BR2_PACKAGE_LIBICONV),y)
 MUTT_DEPENDENCIES += libiconv
